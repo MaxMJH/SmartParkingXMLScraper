@@ -67,7 +67,7 @@ public class DatabaseWrapper {
 				}
 			} else {
 				// If Query is INSERT, UPDATE, and DELETE, see if any rows where added / changed.
-				if(preparedStatement.getUpdateCount() != -1) {
+				if(preparedStatement.getUpdateCount() != -1 && preparedStatement.getUpdateCount() != 0) {
 					results.put(true, new ArrayList<ArrayList<Object>>());
 					rows.add(preparedStatement.getUpdateCount());
 					results.get(true).add(rows);
@@ -79,6 +79,9 @@ public class DatabaseWrapper {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
+			results.put(false, new ArrayList<ArrayList<Object>>());
+			rows.add(false);
+			results.get(false).add(rows);
 		}
 		return results;
 	}

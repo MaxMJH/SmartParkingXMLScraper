@@ -31,34 +31,57 @@ public class XMLScraper {
 	/*---- Methods ----*/
 	// Must account for typos, throw error message if there is.
 	public List<List<String>> parseXML(String tagName) throws SAXException, IOException {
-		// Get the entire XML document.
-		Document document = this.documentBuilder.parse(this.xmlURL.openStream());
-		
 		// An array which holds the value of each tag specified by tags member.
 		List<List<String>> results = new ArrayList<List<String>>();
 		
-		// Grab re-occurring tag.
-		NodeList list = document.getElementsByTagName(tagName);
-		
-		// Iterate through XML document.
-		for(int i = 0; i < list.getLength(); i++) {
-			Node node = list.item(i);
-			results.add(new ArrayList<String>());
+		if(this.xmlURL.toString().endsWith(".xml")) {
+			// Add an exception which checks if the file is actually XML, rather than just the extension.
 			
-			if(node.getNodeType() == Node.ELEMENT_NODE) {
-				Element element = (Element) node;				
+			// Get the entire XML document.
+			Document document = this.documentBuilder.parse(this.xmlURL.openStream());
+			
+			// Grab re-occurring tag.
+			NodeList list = document.getElementsByTagName(tagName);
+			
+			// Iterate through XML document.
+			for(int i = 0; i < list.getLength(); i++) {
+				Node node = list.item(i);
+				results.add(new ArrayList<String>());
 				
-				for(int j = 0; j < this.tags.length; j++) {
-					// Some of the specified tags may have attributes, if so add them to the list.
-					if(element.hasAttribute(tags[j])) {
-						results.get(i).add(element.getAttribute(tags[j]).toString().trim());
-					} else {
-						results.get(i).add(element.getElementsByTagName(tags[j]).item(0).getTextContent().trim());
+				if(node.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) node;				
+					
+					for(int j = 0; j < this.tags.length; j++) {
+						// Some of the specified tags may have attributes, if so add them to the list.
+						if(element.hasAttribute(tags[j])) {
+							results.get(i).add(element.getAttribute(tags[j]).toString().trim());
+						} else {
+							results.get(i).add(element.getElementsByTagName(tags[j]).item(0).getTextContent().trim());
+						}
 					}
 				}
 			}
+		} else {
+			results.add(new ArrayList<String>());
+			results.get(0).add("The URL you entered needs to be XML");
 		}
 		
 		return results;
+	}
+	
+	public URL getXMLURL() {
+		return this.xmlURL;
+	}
+	
+	public void setXMLURL(URL xmlURL)  {
+		this.xmlURL = xmlURL;
+	}
+	
+	public String[] getTags() {
+		return this.tags;
+	}
+	
+	public void setTags(String[] tags) {
+		this.tags = tags;
 	}
 }
