@@ -25,6 +25,10 @@ public class Queries {
 		return "SELECT Carpark.carparkID FROM Carpark INNER JOIN City ON Carpark.cityID = City.cityID WHERE City.cityName = ?;";
 	}
 	
+	public static String getCarparks() {
+		return "SELECT Carpark.carparkName, Carpark.latitude, Carpark.longitude, Carpark.totalSpaces FROM Carpark WHERE Carpark.cityID = ?;";
+	}
+	
 	public static String addFiveMinutes() {
 		return "INSERT INTO FiveMinutes (FiveMinutes.carparkID, FiveMinutes.recordVersionTime, FiveMinutes.occupiedSpaces, FiveMinutes.isOpen) VALUES (?, ?, ?, ?);";
 	}

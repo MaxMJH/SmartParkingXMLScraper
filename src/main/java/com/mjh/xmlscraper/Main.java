@@ -16,20 +16,31 @@ import org.xml.sax.SAXException;
 
 public class Main {
 	public static void main(String[] args) throws SQLException, SAXException, IOException, ParserConfigurationException, ClassNotFoundException {
-		// Get args for city name.
+		// Get CLI arguments.
 		String cityName = args[0];
 		String mainTag = args[1];
 		URL url = new URL(args[2]);
 		String[] tags = IntStream.range(3, args.length).mapToObj(i -> args[i]).toArray(String[]::new);
 		
-		DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
 		
-		// Add City to Database.
+		// Create a LinkedHashMap to store values for prepared statements.
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
-		values.put(0, cityName);
-		Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.addCity(), values);
 		
-		// Add carparks.
+		// Need to check first if the city being added already exists.
+		values.put(0, cityName); 
+		Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.cityExists(), values);
+		
+		int cityID = -1;
+		
+		// If the city does not exist, add it to the database. If it does, get the city's city ID.
+		if(results.get(true) == null) {
+			databaseWrapper.executeQuery(Queries.addCity(), values);
+		} else {
+			cityID = (int) results.get(true).get(0).get(0);
+		}
+		 
+		// Load carparks from XML.
 		XMLScraper xmlScraper = new XMLScraper(url, tags);
 		
 		List<List<String>> xml = xmlScraper.parseXML(mainTag);
@@ -42,20 +53,24 @@ public class Main {
 					xml.get(i).get(1), 
 					xml.get(i).get(2), 
 					Integer.valueOf(xml.get(i).get(3)), 
-					Double.valueOf(xml.get(i).get(4)), 
-					Double.valueOf(xml.get(i).get(5)), 
+					Float.valueOf(xml.get(i).get(4)), 
+					Float.valueOf(xml.get(i).get(5)), 
 					Integer.valueOf(xml.get(i).get(6)), 
 					xml.get(i).get(7)
 				)
 			);
 		}
 		
-		values.put(0, cityName);
-		results = databaseWrapper.executeQuery(Queries.cityExists(), values);
+		// If the city is new, add the carparks. If not, check to see if there are new carparks available.
+		if(cityID == -1) {
+			values = new LinkedHashMap<>();
+			values.put(0, cityID);
 		
-		if(results.get(true) != null) {
-			int cityID = (int) results.get(true).get(0).get(0);
-			
+			// Get the newly created city's city ID.
+			results = databaseWrapper.executeQuery(Queries.cityExists(), values);
+			cityID = (int) results.get(true).get(0).get(0);
+		
+			// Add each carpark to the database.
 			for(int i = 0; i < carparks.size(); i++) {
 				values = new LinkedHashMap<>();
 				values.put(0, carparks.get(i).getText());
@@ -66,11 +81,37 @@ public class Main {
 				results = databaseWrapper.executeQuery(Queries.addCarpark(), values);
 			}
 		} else {
-			return;
+			// City is not new, therefore some carparks may be newly added. Check for that.
+			values = new LinkedHashMap<>();
+			values.put(0, cityID);
+			
+			results = databaseWrapper.executeQuery(Queries.getCarparks(), values);
+			
+			// Go through existing carparks.
+			for(int i = 0; i < results.get(true).size(); i++) {
+				String carparkName = (String) results.get(true).get(i).get(0);
+				float latitude = (Float) results.get(true).get(i).get(1);
+				float longitude = (Float) results.get(true).get(i).get(2);
+				int totalSpaces = (Integer) results.get(true).get(i).get(3);
+	
+				// Create a carpark instance of existing carparks within the database.
+				Carpark carpark = new Carpark(-1, carparkName, null, totalSpaces, latitude, longitude, -1, null);
+				
+				// If the carparks pulled from the XML are not in the database, add them.
+				if(!carparks.contains(carpark)) {
+					values = new LinkedHashMap<>();
+					values.put(0, carparks.get(i).getText());
+					values.put(1, carparks.get(i).getLatitude());
+					values.put(2, carparks.get(i).getLongitude());
+					values.put(3, carparks.get(i).getParkingNumberOfSpaces());
+					values.put(4, cityID);
+					results = databaseWrapper.executeQuery(Queries.addCarpark(), values);
+				}
+			}
 		}
 		
 		SchedulerService schedulerService = new SchedulerService();
-		
+	
 		schedulerService.scheduleForFiveMinutes(new Runnable() {
 			@Override
 			public void run() {
@@ -87,8 +128,8 @@ public class Main {
 								xml.get(i).get(1), 
 								xml.get(i).get(2), 
 								Integer.valueOf(xml.get(i).get(3)), 
-								Double.valueOf(xml.get(i).get(4)), 
-								Double.valueOf(xml.get(i).get(5)), 
+								Float.valueOf(xml.get(i).get(4)), 
+								Float.valueOf(xml.get(i).get(5)), 
 								Integer.valueOf(xml.get(i).get(6)), 
 								xml.get(i).get(7)
 							)
@@ -96,7 +137,7 @@ public class Main {
 					}
 					
 					// URGENT - MUST REMOVE THIS USER WHEN PROJECT IS COMPLETE.
-					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
 					List<Integer> carparkIDs = new ArrayList<>();
 					
 					LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
@@ -111,7 +152,7 @@ public class Main {
 					
 					for(int i = 0; i < carparks.size(); i++) {
 						values.put(0, carparkIDs.get(i));
-						values.put(1, Calendar.getInstance().getTime().toString()); // carparks.get(i).getParkingRecordVersionTime()
+						values.put(1, Calendar.getInstance().getTime().toString());
 						values.put(2, carparks.get(i).getParkingNumberOfOccupiedSpaces());
 						values.put(3, carparks.get(i).getParkingSiteOpeningStatus().equals("open") ? true : false);
 						databaseWrapper.executeQuery(Queries.addFiveMinutes(), values);
@@ -127,7 +168,7 @@ public class Main {
 			public void run() {
 				try {
 					// URGENT - MUST REMOVE THIS USER WHEN PROJECT IS COMPLETE.
-					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
 					List<Integer> carparkIDs = new ArrayList<>();
 					
 					LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
@@ -171,7 +212,7 @@ public class Main {
 			public void run() {
 				try {
 					// URGENT - MUST REMOVE THIS USER WHEN PROJECT IS COMPLETE.
-					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
 					List<Integer> carparkIDs = new ArrayList<>();
 					
 					LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();

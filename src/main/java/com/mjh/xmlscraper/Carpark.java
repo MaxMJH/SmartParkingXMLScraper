@@ -8,8 +8,8 @@ public class Carpark {
 	private String text;
 	private String parkingRecordVersionTime;
 	private int parkingNumberOfSpaces;
-	private double latitude;
-	private double longitude;
+	private float latitude;
+	private float longitude;
 	private int parkingNumberOfOccupiedSpaces;
 	private String parkingSiteOpeningStatus;
 	
@@ -19,13 +19,13 @@ public class Carpark {
 		this.text = "";
 		this.parkingRecordVersionTime = "";
 		this.parkingNumberOfSpaces = -1;
-		this.latitude = 0.0;
-		this.longitude = 0.0;
+		this.latitude = 0.0F;
+		this.longitude = 0.0F;
 		this.parkingNumberOfOccupiedSpaces = -1;
 		this.parkingSiteOpeningStatus = "";
 	}
 	
-	public Carpark(int id, String text, String parkingRecordVersionTime, int parkingNumberOfSpaces, double latitude, double longitude, int parkingNumberOfOccupiedSpaces, String parkingSiteOpeningStatus) {
+	public Carpark(int id, String text, String parkingRecordVersionTime, int parkingNumberOfSpaces, float latitude, float longitude, int parkingNumberOfOccupiedSpaces, String parkingSiteOpeningStatus) {
 		this.id = id;
 		this.text = text;
 		this.parkingRecordVersionTime = parkingRecordVersionTime;
@@ -69,19 +69,19 @@ public class Carpark {
 		this.parkingNumberOfSpaces = parkingNumberOfSpaces;
 	}
 	
-	public double getLatitude() {
+	public float getLatitude() {
 		return this.latitude;
 	}
 	
-	public void setLatitude(double latitude) {
+	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
 	
-	public double getLongitude() {
+	public float getLongitude() {
 		return this.longitude;
 	}
 	
-	public void setLongitude(double longitude) {
+	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
 	
@@ -117,7 +117,7 @@ public class Carpark {
 		}
 		
 		Carpark other = (Carpark) obj;
-		return id == other.id;
+		return this.id == other.id || (this.text.equals(other.text) && this.latitude == other.latitude && this.longitude == other.longitude && this.parkingNumberOfSpaces == other.parkingNumberOfSpaces);
 	}
 	
 	@Override

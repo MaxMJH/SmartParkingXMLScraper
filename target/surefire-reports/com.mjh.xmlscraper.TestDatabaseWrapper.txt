@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.mjh.xmlscraper.TestDatabaseWrapper
+-------------------------------------------------------------------------------
+Tests run: 24, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 21.86 s - in com.mjh.xmlscraper.TestDatabaseWrapper

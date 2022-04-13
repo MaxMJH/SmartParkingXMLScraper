@@ -35,7 +35,7 @@ public class XMLScraper {
 		List<List<String>> results = new ArrayList<List<String>>();
 		
 		if(this.xmlURL.toString().endsWith(".xml")) {
-			// Add an exception which checks if the file is actually XML, rather than just the extension.
+			// TODO: Throw an exception if the file is not XML, rather than just checking the extension.
 			
 			// Get the entire XML document.
 			Document document = this.documentBuilder.parse(this.xmlURL.openStream());
