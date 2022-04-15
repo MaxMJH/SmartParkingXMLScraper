@@ -112,7 +112,7 @@ public class TestDatabaseWrapper {
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Bristol");
-		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery("UPDATE City SET City.cityName = \\\"Derby\\\" WHERE City.cityName = (?);", values);
+		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery("UPDATE City SET City.cityName = \"Derby\" WHERE City.cityName = (?);", values);
 		
 		assertTrue(results.containsKey(false));
 	}

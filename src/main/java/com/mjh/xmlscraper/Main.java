@@ -64,7 +64,7 @@ public class Main {
 		// If the city is new, add the carparks. If not, check to see if there are new carparks available.
 		if(cityID == -1) {
 			values = new LinkedHashMap<>();
-			values.put(0, cityID);
+			values.put(0, cityName);
 		
 			// Get the newly created city's city ID.
 			results = databaseWrapper.executeQuery(Queries.cityExists(), values);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.mjh.xmlscraper.TestXMLScraper" time="0.415" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.mjh.xmlscraper.TestXMLScraper" time="0.45" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -17,7 +17,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Foundation\jdk-11.0.12.7-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\Max\AppData\Local\Temp\surefire17792359416550466152\surefirebooter3529181774049838791.jar C:\Users\Max\AppData\Local\Temp\surefire17792359416550466152 2022-04-13T16-12-32_542-jvmRun1 surefire8040187129220200766tmp surefire_014871068117093580079tmp"/>
+    <property name="sun.java.command" value="C:\Users\Max\AppData\Local\Temp\surefire1241106254743694454\surefirebooter11001041489113824493.jar C:\Users\Max\AppData\Local\Temp\surefire1241106254743694454 2022-04-15T02-51-37_684-jvmRun1 surefire17177649371780959890tmp surefire_09060333927153950015tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\Max\Desktop\University Work\Year 3\Term 1\Development Project\Student&apos;s Cartridge\Development\Code\XML Scraper\xmlscraper\target\test-classes;C:\Users\Max\Desktop\University Work\Year 3\Term 1\Development Project\Student&apos;s Cartridge\Development\Code\XML Scraper\xmlscraper\target\classes;C:\Users\Max\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\Max\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\Max\.m2\repository\mysql\mysql-connector-java\8.0.27\mysql-connector-java-8.0.27.jar;C:\Users\Max\.m2\repository\com\google\protobuf\protobuf-java\3.11.4\protobuf-java-3.11.4.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -33,7 +33,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="C:\Users\Max\AppData\Local\Temp\surefire17792359416550466152\surefirebooter3529181774049838791.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Max\AppData\Local\Temp\surefire1241106254743694454\surefirebooter11001041489113824493.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.12+7"/>
@@ -61,6 +61,6 @@
     <property name="java.class.version" value="55.0"/>
   </properties>
   <testcase name="testParseXMLWithIncorrectURL" classname="com.mjh.xmlscraper.TestXMLScraper" time="0.01"/>
-  <testcase name="testParseXMLWithCorrectURL" classname="com.mjh.xmlscraper.TestXMLScraper" time="0.404"/>
+  <testcase name="testParseXMLWithCorrectURL" classname="com.mjh.xmlscraper.TestXMLScraper" time="0.439"/>
   <testcase name="testXMLScraperInstance" classname="com.mjh.xmlscraper.TestXMLScraper" time="0.001"/>
 </testsuite>
