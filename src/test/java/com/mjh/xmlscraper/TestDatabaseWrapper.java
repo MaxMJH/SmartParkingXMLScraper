@@ -14,27 +14,20 @@ public class TestDatabaseWrapper {
 	public void testDatabaseWrapperInstance() {
 		DatabaseWrapper database = null;
 		
-		database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		database = new DatabaseWrapper();
 		assertNotNull(database);
 	}
 
 	@Test
 	public void testCheckConnection() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		assertTrue(database.canConnect());
 	}
 	
 	@Test
-	public void testCheckConnectionOnFalseURL() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.54:3306/test_smartpark", "test", "test");
-		
-		assertFalse(database.canConnect());
-	}
-	
-	@Test
 	public void testInsertQueryWithNoValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery(Queries.addCity(), values);
@@ -44,7 +37,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testInsertQueryWithValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Leicester");
@@ -55,7 +48,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testSelectQueryWithNoValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery("SELECT City.cityName FROM City WHERE City.cityName = (?);", values);
@@ -65,7 +58,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testSelectQueryWithValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Nottingham");
@@ -76,7 +69,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testSelectQueryWithValuesThatDoNotExist() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Bristol");
@@ -87,7 +80,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testUpdateQueryWithNoValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery("UPDATE City SET City.cityName = \"Derby\" WHERE City.cityName = (?);", values);
@@ -97,7 +90,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testUpdateQueryWithValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Leicester");
@@ -108,7 +101,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testUpdateQueryWithValuesThatDoNotExist() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Bristol");
@@ -119,7 +112,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testDeleteQueryWithNoValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery("DELETE FROM City WHERE City.cityName = (?);", values);
@@ -129,7 +122,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testDeleteQueryWithValues() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Derby");
@@ -140,7 +133,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testDeleteQueryWithValuesThatDoNotExist() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Scotland");
@@ -151,7 +144,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testCityExists() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Nottingham");
@@ -162,7 +155,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testAddCity() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "London");
@@ -173,7 +166,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testCarparkExists() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Test Carpark");
@@ -184,7 +177,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testAddCarpark() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "New Carpark");
@@ -199,7 +192,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testGetCarparkIDs() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Nottingham");
@@ -210,7 +203,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testAddFiveMinutes() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, 1);
@@ -224,7 +217,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testGetFiveMinutesEntries() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Nottingham");
@@ -237,7 +230,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testAddHourly() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, 1);
@@ -250,7 +243,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testGetHourlyEntries() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, "Nottingham");
@@ -263,7 +256,7 @@ public class TestDatabaseWrapper {
 	
 	@Test
 	public void testAddDaily() {
-		DatabaseWrapper database = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/test_smartpark", "test", "test");
+		DatabaseWrapper database = new DatabaseWrapper();
 		
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		values.put(0, 1);

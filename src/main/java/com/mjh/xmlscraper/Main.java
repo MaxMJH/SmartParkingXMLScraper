@@ -21,33 +21,15 @@ public class Main {
 		String mainTag = args[1];
 		URL url = new URL(args[2]);
 		String[] tags = IntStream.range(3, args.length).mapToObj(i -> args[i]).toArray(String[]::new);
-		
-		DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
-		
-		// Create a LinkedHashMap to store values for prepared statements.
-		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
-		
-		// Need to check first if the city being added already exists.
-		values.put(0, cityName); 
-		Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.cityExists(), values);
-		
-		int cityID = -1;
-		
-		// If the city does not exist, add it to the database. If it does, get the city's city ID.
-		if(results.get(true) == null) {
-			databaseWrapper.executeQuery(Queries.addCity(), values);
-		} else {
-			cityID = (int) results.get(true).get(0).get(0);
-		}
 		 
 		// Load carparks from XML.
 		XMLScraper xmlScraper = new XMLScraper(url, tags);
-		
 		List<List<String>> xml = xmlScraper.parseXML(mainTag);
 		
+		// Go through each carpark returned by the XML Scraper.
 		ArrayList<Carpark> carparks = new ArrayList<>();
-		
 		for(int i = 0; i < xml.size(); i++) {
+			// Instantiate a Carpark and populate it with data.
 			carparks.add(new Carpark(
 					Integer.valueOf(xml.get(i).get(0)), 
 					xml.get(i).get(1), 
@@ -59,6 +41,25 @@ public class Main {
 					xml.get(i).get(7)
 				)
 			);
+		}
+		
+		// Initialise a connection to the database.
+		DatabaseWrapper databaseWrapper = new DatabaseWrapper();
+				
+		// Create a LinkedHashMap to store values for prepared statements.
+		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
+				
+		// Need to check first if the city being added already exists.
+		values.put(0, cityName); 
+		Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.cityExists(), values);
+				
+		int cityID = -1;
+				
+		// If the city does not exist, add it to the database. If it does, get the city's city ID.
+		if(results.get(true) == null) {
+			databaseWrapper.executeQuery(Queries.addCity(), values);
+		} else {
+			cityID = (int) results.get(true).get(0).get(0);
 		}
 		
 		// If the city is new, add the carparks. If not, check to see if there are new carparks available.
@@ -112,16 +113,17 @@ public class Main {
 		
 		SchedulerService schedulerService = new SchedulerService();
 	
+		// Start the schedule that collects data from the XML URL every five minutes.
 		schedulerService.scheduleForFiveMinutes(new Runnable() {
 			@Override
 			public void run() {
 				try {
+					// Parse the same XML URL with the same tags to get real-time data.
 					XMLScraper xmlScraper = new XMLScraper(url, tags);
-					
 					List<List<String>> xml = xmlScraper.parseXML(mainTag);
 					
+					// Add each of the carparks parking data to an array.
 					ArrayList<Carpark> carparks = new ArrayList<>();
-					
 					for(int i = 0; i < xml.size(); i++) {
 						carparks.add(new Carpark(
 								Integer.valueOf(xml.get(i).get(0)), 
@@ -136,20 +138,27 @@ public class Main {
 						);
 					}
 					
-					// URGENT - MUST REMOVE THIS USER WHEN PROJECT IS COMPLETE.
-					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
-					List<Integer> carparkIDs = new ArrayList<>();
+					// Create a connection to the database.
+					DatabaseWrapper databaseWrapper = new DatabaseWrapper();
 					
+					// Create a LinkedHashMap to store query values.
 					LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 					values.put(0, cityName);
+					
+					// Execute the getCarparkIDs query and store the result.
 					Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.getCarparkIDs(), values);
 					
+					List<Integer> carparkIDs = new ArrayList<>();
+					
+					// If anything was returned, true is returned, therefore if the query failed we would expect results.get(true) to return null.
 					if(results.get(true) != null) {
 						for(int i = 0; i < results.get(true).size(); i++) {
+							// Get the ID of each carpark.
 							carparkIDs.add((int) results.get(true).get(i).get(0));
 						}
 					}
 					
+					// Iterate through each carpark and add their data to the database.
 					for(int i = 0; i < carparks.size(); i++) {
 						values.put(0, carparkIDs.get(i));
 						values.put(1, Calendar.getInstance().getTime().toString());
@@ -163,24 +172,31 @@ public class Main {
 			}
 		});
 		
+		// Start the schedule that collects data from database every hour.
 		schedulerService.scheduleForHour(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					// URGENT - MUST REMOVE THIS USER WHEN PROJECT IS COMPLETE.
-					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
-					List<Integer> carparkIDs = new ArrayList<>();
+					// Create a connection to the database.
+					DatabaseWrapper databaseWrapper = new DatabaseWrapper();
 					
+					// Create a LinkedHashMap to store query values.
 					LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 					values.put(0, cityName);
+					
+					// Execute the getCarparkIDs query and store the result.
 					Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.getCarparkIDs(), values);
 					
+					List<Integer> carparkIDs = new ArrayList<>();
+					
+					// If anything was returned, true is returned, therefore if the query failed we would expect results.get(true) to return null.
 					if(results.get(true) != null) {
 						for(int i = 0; i < results.get(true).size(); i++) {
 							carparkIDs.add((int) results.get(true).get(i).get(0));
 						}
 					}
 					
+					// Iterate through each carpark and get the latest 12 entries of FiveMinutes data.
 					for(int i = 0; i < carparkIDs.size(); i++) {
 						values = new LinkedHashMap<>();
 						values.put(0, cityName);
@@ -189,6 +205,7 @@ public class Main {
 						
 						results = databaseWrapper.executeQuery(Queries.getFiveMinutesEntries(), values);
 						
+						// Calculate the hourly average of occupied spaces.
 						int sum = 0;
 						if(results.get(true) != null) {
 							for(int j = 0; j < results.get(true).size(); j++) {
@@ -196,6 +213,7 @@ public class Main {
 							}
 						}
 						
+						// Add the newly required data to the Hourly table in the database.
 						values.put(0, carparkIDs.get(i));
 						values.put(1, Calendar.getInstance().getTime().toString());
 						values.put(2, sum / 12);
@@ -207,24 +225,31 @@ public class Main {
 			}
 		});
 		
+		// Start the schedule that collects data from the database every 24 hours.
 		schedulerService.scheduleForDaily(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					// URGENT - MUST REMOVE THIS USER WHEN PROJECT IS COMPLETE.
-					DatabaseWrapper databaseWrapper = new DatabaseWrapper("jdbc:mysql://192.168.0.69:3306/smartpark_v2", "test", "test");
-					List<Integer> carparkIDs = new ArrayList<>();
+					// Create a connection to the database.
+					DatabaseWrapper databaseWrapper = new DatabaseWrapper();
 					
+					// Create a LinkedHashMap to store query values.
 					LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 					values.put(0, cityName);
+					
+					// Execute the getCarparkIDs query and store the result.
 					Map<Boolean, ArrayList<ArrayList<Object>>> results = databaseWrapper.executeQuery(Queries.getCarparkIDs(), values);
 					
+					List<Integer> carparkIDs = new ArrayList<>();
+					
+					// If anything was returned, true is returned, therefore if the query failed we would expect results.get(true) to return null.
 					if(results.get(true) != null) {
 						for(int i = 0; i < results.get(true).size(); i++) {
 							carparkIDs.add((int) results.get(true).get(i).get(0));
 						}
 					}
 					
+					// Iterate through each carpark and get the latest 24 entries of Hourly data.
 					for(int i = 0; i < carparkIDs.size(); i++) {
 						values = new LinkedHashMap<>();
 						values.put(0, cityName);
@@ -233,6 +258,7 @@ public class Main {
 						
 						results = databaseWrapper.executeQuery(Queries.getHourlyEntries(), values);
 						
+						// Calculate the hourly average of occupied spaces.
 						float sum = 0.0F;
 						if(results.get(true) != null) {
 							for(int j = 0; j < results.get(true).size(); j++) {
@@ -240,6 +266,7 @@ public class Main {
 							}
 						}
 						
+						// Add the newly required data to the Daily table in the database.
 						values.put(0, carparkIDs.get(i));
 						values.put(1, Calendar.getInstance().getTime().toString());
 						values.put(2, sum / 24);
