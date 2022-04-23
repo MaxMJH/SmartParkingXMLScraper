@@ -32,6 +32,7 @@ public class TestDatabaseWrapper {
 		LinkedHashMap<Integer, Object> values = new LinkedHashMap<>();
 		Map<Boolean, ArrayList<ArrayList<Object>>> results = database.executeQuery(Queries.addCity(), values);
 		
+		// May result in exeception.
 		assertTrue(results.containsKey(false));
 	}
 	

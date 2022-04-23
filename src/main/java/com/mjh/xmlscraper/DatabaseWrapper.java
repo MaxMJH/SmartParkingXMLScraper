@@ -50,7 +50,7 @@ public class DatabaseWrapper {
 	/**
 	 * Check to see if a connection can be made to the database. This is used mainly for testing.
 	 * 
-	 * @return true if a connection can be made to the database, false otherwise.
+	 * @return true if a connection can be made to the database, or false otherwise.
 	 */
 	public boolean canConnect() {
 		// Check to see if a connection can be made to the database.

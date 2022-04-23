@@ -82,7 +82,7 @@ public class Main {
 				results = databaseWrapper.executeQuery(Queries.addCarpark(), values);
 			}
 		} else {
-			// City is not new, therefore some carparks may be newly added. Check for that.
+			// The city is not new, therefore some carparks may be newly added. Check for that.
 			values = new LinkedHashMap<>();
 			values.put(0, cityID);
 			

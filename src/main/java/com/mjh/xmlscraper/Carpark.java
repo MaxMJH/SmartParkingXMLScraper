@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Class which stores all relevant carparking information.
  * 
- * This class acts as a storage for all carparking information received
+ * This class acts as a storage for all car parking information received
  * from the XML Scraper. At this current level, each of the class' properties
  * correspond to an element from the XML. As only one dataset has been found,
  * there is an assumption that other XML datasets will conform to the same layout.

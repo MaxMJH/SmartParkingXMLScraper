@@ -125,7 +125,7 @@ public class Queries {
 	 * Returns a string containing a query.
 	 * 
 	 * This query aims to return a specified number of hourly data for a
-	 * specific city and carpark ID.
+	 * specific city and car park ID.
 	 * 
 	 * @return A query.
 	 */

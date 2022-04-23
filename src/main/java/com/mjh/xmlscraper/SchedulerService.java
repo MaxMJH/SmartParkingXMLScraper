@@ -31,7 +31,7 @@ public class SchedulerService {
 	
 	/*---- Methods ----*/
 	/**
-	 * Schedules a thread to run every 5 minutes after an initial 2 minute delay.
+	 * Schedules a thread to run every 5 minutes after an initial 2 minutes delay.
 	 * This is usually used for the FiveMinutes section of the XML Scraper.
 	 * 
 	 * @param runnable A thread to be run.
@@ -41,7 +41,7 @@ public class SchedulerService {
 	}
 	
 	/**
-	 * Schedules a thread to run every 60 minutes after an initial 58 minute delay.
+	 * Schedules a thread to run every 60 minutes after an initial 58 minutes delay.
 	 * This is usually used for the Hourly section of the XML Scraper.
 	 * 
 	 * @param runnable A thread to be run.
@@ -51,7 +51,7 @@ public class SchedulerService {
 	}
 	
 	/**
-	 * Schedules a thread to run every 1439 minutes after an initial 1440 minute delay.
+	 * Schedules a thread to run every 1439 minutes after an initial 1440 minutes delay.
 	 * This is usually used for the Daily section of the XML Scraper.
 	 * 
 	 * @param runnable A thread to be run.

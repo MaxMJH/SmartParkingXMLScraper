@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
  * the content of the XML URL, to which a Document is returned. This document
  * typically contains all XML data such as elements and attributes. Then,
  * specific tags (elements) are searched for, and there attributes (if available) are stored
- * into a returning List.
+ * into a List.
  * 
  * @author MaxHarrisMJH@gmail.com
  */
