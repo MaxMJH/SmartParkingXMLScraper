@@ -79,7 +79,7 @@ public class Main {
 				values.put(2, carparks.get(i).getLongitude());
 				values.put(3, carparks.get(i).getParkingNumberOfSpaces());
 				values.put(4, cityID);
-				results = databaseWrapper.executeQuery(Queries.addCarpark(), values);
+				databaseWrapper.executeQuery(Queries.addCarpark(), values);
 			}
 		} else {
 			// The city is not new, therefore some carparks may be newly added. Check for that.
@@ -106,7 +106,7 @@ public class Main {
 					values.put(2, carparks.get(i).getLongitude());
 					values.put(3, carparks.get(i).getParkingNumberOfSpaces());
 					values.put(4, cityID);
-					results = databaseWrapper.executeQuery(Queries.addCarpark(), values);
+					databaseWrapper.executeQuery(Queries.addCarpark(), values);
 				}
 			}
 		}

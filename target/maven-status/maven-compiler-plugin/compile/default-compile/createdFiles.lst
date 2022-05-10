@@ -6,4 +6,5 @@ com\mjh\xmlscraper\SchedulerService.class
 com\mjh\xmlscraper\DatabaseWrapper.class
 com\mjh\xmlscraper\Main$1.class
 com\mjh\xmlscraper\Main.class
+com\mjh\xmlscraper\DatabaseCredentials.class
 com\mjh\xmlscraper\XMLScraper.class
