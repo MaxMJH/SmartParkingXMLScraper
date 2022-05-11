@@ -1,0 +1,3 @@
+# ignore DatabaseCredentials files
+src/main/java/com/mjh/xmlscraper/DatabaseCredentials.java
+target/classes/com/mjh/xmlscraper/DatabaseCredentials.class
